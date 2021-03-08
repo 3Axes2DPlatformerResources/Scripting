@@ -1,17 +1,34 @@
-using System;
 using UnityEngine;
 
 public class SquareController : MonoBehaviour {
+    [SerializeField] private Transform respawnTransform;
     [SerializeField] private Rigidbody2D squareRigidbody;
     [SerializeField] private float speed = 0.1f;
     [SerializeField] private float jumpPower = 1000f;
 
+    private int coinCounter;
+
     private bool grounded;
 
-    void Start() {
-        grounded = false;
+    private void OnTriggerEnter2D(Collider2D other) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("FinDeNiveau"))
+            Debug.Log("gagné!");
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
+            Debug.Log("perdu");
+            squareRigidbody.MovePosition(respawnTransform.position);
+            squareRigidbody.velocity = Vector2.zero;
+        } else if (other.gameObject.layer == LayerMask.NameToLayer("Coin")) {
+            coinCounter++;
+            other.gameObject.GetComponent<CoinController>().HandleDestruction();
+            Debug.Log(coinCounter);
+        }
     }
     
+    void Start() {
+        grounded = false;
+        coinCounter = 0;
+    }
+
     // Update is called once per frame
     void Update() {
         Vector2 movementVector = new Vector2(
@@ -30,25 +47,18 @@ public class SquareController : MonoBehaviour {
         if (Input.GetButtonDown("MaNouvelleTouche"))
             Debug.Log("coucou");
     }
-
-    private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer("FinDeNiveau"))
-            Debug.Log("gagné!");
-    }
+    
 
     private void OnCollisionEnter2D(Collision2D other) {
-        Debug.Log(Vector3.Dot(other.contacts[0].normal, Vector3.up));
         if (other.collider.gameObject.layer == LayerMask.NameToLayer("Floor")
-            && Vector3.Dot(other.contacts[0].normal, Vector3.up) > 0.9f) {
+            && Vector3.Dot(other.GetContact(0).normal, Vector3.up) > 0.9f) {
             grounded = true;
         }
         
     }
 
     private void OnCollisionExit2D(Collision2D other) {
-        if (other.collider.gameObject.layer == LayerMask.NameToLayer("Floor")
-            && other.contactCount > 0
-            && Vector3.Dot(other.contacts[0].normal, Vector3.up) > 0.9f) {
+        if (other.collider.gameObject.layer == LayerMask.NameToLayer("Floor")) {
             grounded = false;
         }
     }
