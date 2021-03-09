@@ -5,28 +5,17 @@ public class SquareController : MonoBehaviour {
     [SerializeField] private Rigidbody2D squareRigidbody;
     [SerializeField] private float speed = 0.1f;
     [SerializeField] private float jumpPower = 1000f;
-
+    
     private int coinCounter;
+    private int lifeCounter;
 
     private bool grounded;
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer("FinDeNiveau"))
-            Debug.Log("gagné!");
-        else if (other.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
-            Debug.Log("perdu");
-            squareRigidbody.MovePosition(respawnTransform.position);
-            squareRigidbody.velocity = Vector2.zero;
-        } else if (other.gameObject.layer == LayerMask.NameToLayer("Coin")) {
-            coinCounter++;
-            other.gameObject.GetComponent<CoinController>().HandleDestruction();
-            Debug.Log(coinCounter);
-        }
-    }
-    
     void Start() {
         grounded = false;
         coinCounter = 0;
+        lifeCounter = 3;
+        GameManager.LifeDisplayController.ChangeText(lifeCounter);
     }
 
     // Update is called once per frame
@@ -46,6 +35,25 @@ public class SquareController : MonoBehaviour {
 
         if (Input.GetButtonDown("MaNouvelleTouche"))
             Debug.Log("coucou");
+    }
+    
+    private void OnTriggerEnter2D(Collider2D other) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("FinDeNiveau"))
+            Debug.Log("gagné!");
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
+            Respawn();
+            lifeCounter--;
+            GameManager.LifeDisplayController.ChangeText(lifeCounter);
+        } else if (other.gameObject.layer == LayerMask.NameToLayer("Coin")) {
+            coinCounter++;
+            other.gameObject.GetComponent<CoinController>().HandleDestruction();
+            GameManager.CoinDisplayController.ChangeText(coinCounter);
+        }
+    }
+
+    public void Respawn() {
+        squareRigidbody.MovePosition(respawnTransform.position);
+        squareRigidbody.velocity = Vector2.zero;
     }
     
 
