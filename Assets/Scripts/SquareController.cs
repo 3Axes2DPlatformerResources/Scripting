@@ -3,6 +3,8 @@ using UnityEngine;
 public class SquareController : MonoBehaviour {
     [SerializeField] private Transform respawnTransform;
     [SerializeField] private Rigidbody2D squareRigidbody;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private ParticleSystem jumpParticleSystem;
     [SerializeField] private float speed = 0.1f;
     [SerializeField] private float jumpPower = 1000f;
     
@@ -30,8 +32,10 @@ public class SquareController : MonoBehaviour {
             squareRigidbody.AddForce(movementVector * (speed * Time.deltaTime));
         }
 
-        if (Input.GetButtonUp("Jump") && grounded)
+        if (Input.GetButtonUp("Jump") && grounded) {
+            jumpParticleSystem.Play();
             squareRigidbody.AddForce(Vector2.up * jumpPower);
+        }
 
         if (Input.GetButtonDown("MaNouvelleTouche"))
             Debug.Log("coucou");
@@ -44,6 +48,7 @@ public class SquareController : MonoBehaviour {
             Respawn();
             lifeCounter--;
             GameManager.LifeDisplayController.ChangeText(lifeCounter);
+            audioSource.Play();
         } else if (other.gameObject.layer == LayerMask.NameToLayer("Coin")) {
             coinCounter++;
             other.gameObject.GetComponent<CoinController>().HandleDestruction();
