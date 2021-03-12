@@ -7,17 +7,17 @@ public class SquareController : MonoBehaviour {
     [SerializeField] private float speed = 0.1f;
     [SerializeField] private float jumpPower = 1000f;
     
-    private int coinCounter;
-    private int lifeCounter;
+    public int CoinCounter { get; private set; }
+    public int LifeCounter { get; private set; }
     private Transform respawnTransform;
 
     private bool grounded;
 
     void Start() {
         grounded = false;
-        coinCounter = 0;
-        lifeCounter = 3;
-        GameManager.LifeDisplayController.ChangeText(lifeCounter);
+        CoinCounter = 0;
+        LifeCounter = 3;
+        GameManager.LifeDisplayController.ChangeText(LifeCounter);
     }
 
     // Update is called once per frame
@@ -50,13 +50,13 @@ public class SquareController : MonoBehaviour {
             Debug.Log("gagné!");
         else if (other.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
             Respawn();
-            lifeCounter--;
-            GameManager.LifeDisplayController.ChangeText(lifeCounter);
+            LifeCounter--;
+            GameManager.LifeDisplayController.ChangeText(LifeCounter);
             audioSource.Play();
         } else if (other.gameObject.layer == LayerMask.NameToLayer("Coin")) {
-            coinCounter++;
+            CoinCounter++;
             other.gameObject.GetComponent<CoinController>().HandleDestruction();
-            GameManager.CoinDisplayController.ChangeText(coinCounter);
+            GameManager.CoinDisplayController.ChangeText(CoinCounter);
         }
     }
 

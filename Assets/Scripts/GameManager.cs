@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
     public static LifeDisplayController LifeDisplayController { get; private set; }
     [SerializeField] private List<GameObject> objectsNotToDestroyOnLoad;
     [SerializeField] private SquareController squareController;
-    private static SquareController SquareController;
+    public static SquareController SquareController { get; private set; }
     
     private void Awake() {
         CoinDisplayController = coinDisplayController;
