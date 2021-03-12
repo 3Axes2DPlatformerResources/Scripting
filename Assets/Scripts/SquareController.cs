@@ -1,7 +1,6 @@
 using UnityEngine;
 
 public class SquareController : MonoBehaviour {
-    [SerializeField] private Transform respawnTransform;
     [SerializeField] private Rigidbody2D squareRigidbody;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private ParticleSystem jumpParticleSystem;
@@ -10,6 +9,7 @@ public class SquareController : MonoBehaviour {
     
     private int coinCounter;
     private int lifeCounter;
+    private Transform respawnTransform;
 
     private bool grounded;
 
@@ -39,6 +39,10 @@ public class SquareController : MonoBehaviour {
 
         if (Input.GetButtonDown("MaNouvelleTouche"))
             Debug.Log("coucou");
+    }
+
+    public void FindRespawnPoint() {
+        respawnTransform = GameObject.Find("SpawnPoint").transform;
     }
     
     private void OnTriggerEnter2D(Collider2D other) {
