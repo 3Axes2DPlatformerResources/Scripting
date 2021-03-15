@@ -3,10 +3,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LoadSave : MonoBehaviour {
-    public static string SavePath { get; private set; }
+    public static string SavePath => Application.persistentDataPath + "/masauvegarde.json";
 
     void Awake() {
-        SavePath = Application.persistentDataPath + "/masauvegarde.json";
         if (File.Exists(SavePath)) {
             string content = File.ReadAllText(SavePath);
             SaveFile saveFile = JsonUtility.FromJson<SaveFile>(content);
