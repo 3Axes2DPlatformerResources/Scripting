@@ -7,8 +7,6 @@ public class EnemyController : MonoBehaviour {
         [SerializeField] private float amplitude = 2f;
         private GameObject projectilePrefab;
 
-        private Coroutine coroutine;
-
         private Vector2 initialPosition;
         private Vector3 currentDirection;
         private float timer;
@@ -18,7 +16,6 @@ public class EnemyController : MonoBehaviour {
                 currentDirection = direction;
                 timer = 0f;
                 projectilePrefab = Resources.Load<GameObject>("Projectile");
-                coroutine = StartCoroutine(MaCoroutine());
         }
         
         private void Update() {
@@ -27,16 +24,13 @@ public class EnemyController : MonoBehaviour {
                 
                 if (Vector3.Distance(enemyTransform.position, initialPosition) > amplitude)
                         currentDirection = -currentDirection;
-
-                if (((int) timer) % 5 == 0)
-                        Instantiate(projectilePrefab, enemyTransform.position, Quaternion.identity);
         }
 
-        private IEnumerator MaCoroutine() {
-                for (int i = 5; i > 0; i--)
-                {
-                        yield return new WaitForSeconds(i);
-                        Debug.Log("coucou");
-                }
+        public void ShootPlayer() {
+                GameObject projectile = Instantiate(projectilePrefab, enemyTransform.position, Quaternion.identity);
+                Vector2 differencePosition = GameManager.SquareController.SquareRigidbody.position -
+                                             (Vector2) enemyTransform.position;
+                projectile.GetComponent<ProjectileController>().ProjectileRigidbody.AddForce(
+                        Vector3.Normalize(differencePosition) * 1000f);
         }
 }

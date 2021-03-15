@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class SquareController : MonoBehaviour {
     [SerializeField] private Rigidbody2D squareRigidbody;
-    [SerializeField] private AudioSource audioSource;
+    public Rigidbody2D SquareRigidbody => squareRigidbody;
+
+    private AudioSource audioSource;
     [SerializeField] private ParticleSystem jumpParticleSystem;
     [SerializeField] private float speed = 0.1f;
     [SerializeField] private float jumpPower = 1000f;
-    
+
     public int CoinCounter { get; private set; }
     public int LifeCounter { get; private set; }
     private Transform respawnTransform;
