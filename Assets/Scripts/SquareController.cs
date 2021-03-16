@@ -4,7 +4,7 @@ public class SquareController : MonoBehaviour {
     [SerializeField] private Rigidbody2D squareRigidbody;
     public Rigidbody2D SquareRigidbody => squareRigidbody;
 
-    private AudioSource audioSource;
+    [SerializeField] private AudioSource audioSource;
     [SerializeField] private ParticleSystem jumpParticleSystem;
     [SerializeField] private float speed = 0.1f;
     [SerializeField] private float jumpPower = 1000f;
@@ -51,15 +51,19 @@ public class SquareController : MonoBehaviour {
         if (other.gameObject.layer == LayerMask.NameToLayer("FinDeNiveau"))
             Debug.Log("gagné!");
         else if (other.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
-            Respawn();
-            LifeCounter--;
-            GameManager.LifeDisplayController.ChangeText(LifeCounter);
-            audioSource.Play();
+            TakeDamage();
         } else if (other.gameObject.layer == LayerMask.NameToLayer("Coin")) {
             CoinCounter++;
             other.gameObject.GetComponent<CoinController>().HandleDestruction();
             GameManager.CoinDisplayController.ChangeText(CoinCounter);
         }
+    }
+
+    public void TakeDamage() {
+        Respawn();
+        LifeCounter--;
+        GameManager.LifeDisplayController.ChangeText(LifeCounter);
+        audioSource.Play();
     }
 
     public void Respawn() {

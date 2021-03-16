@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyDetectionZoneController : MonoBehaviour {
         [SerializeField] private EnemyController enemyController;

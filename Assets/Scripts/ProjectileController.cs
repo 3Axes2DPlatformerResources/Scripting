@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ProjectileController : MonoBehaviour {
     [SerializeField] private Rigidbody2D projectileRigidbody;
@@ -7,7 +6,8 @@ public class ProjectileController : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.collider.gameObject.layer == LayerMask.NameToLayer("Player")) {
-            Debug.Log("touché");
+            Destroy(gameObject);
+            GameManager.SquareController.TakeDamage();
         }
     }
 }
